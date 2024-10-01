@@ -1,0 +1,6 @@
+@UrfuTestTask_HostAddress = http://localhost:5147
+
+GET {{UrfuTestTask_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

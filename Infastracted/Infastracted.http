@@ -1,0 +1,6 @@
+@Infastracted_HostAddress = http://localhost:5215
+
+GET {{Infastracted_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
