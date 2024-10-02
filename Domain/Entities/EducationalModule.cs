@@ -13,12 +13,12 @@ public class EducationalModule
     /// <summary>
     /// Название
     /// </summary>
-    public string title { get; set; }
+    public string Title { get; set; }
     
     /// <summary>
     /// Тип модуля
     /// </summary>
-    public string type { get; set; }
+    public string Type { get; set; }
     
     
 }

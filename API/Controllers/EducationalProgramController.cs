@@ -1,28 +1,81 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Application.Interfaces;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
-namespace UrfuTestTask.Controllers;
-
-public class EducationalProgramController : ControllerBase
+namespace UrfuTestTask.Controllers
 {
-    public async Task<IActionResult> GetAllEducationalPrograms
+    [Route("api/[controller]")]
+    [ApiController]
+    public class EducationalProgramController : ControllerBase
     {
-        
-}
+        private readonly IProgramService _programService;
 
-    public async Task<IActionResult> AddEducationalProgram
-    {
-        
-    }
+        public EducationalProgramController(IProgramService programService)
+        {
+            _programService = programService;
+        }
 
-    public async Task<IActionResult> ChangeEducationalProgram
-    {
-        
-    }
+        [HttpGet]
+        public async Task<IActionResult> GetAllPrograms()
+        {
+            var programs = await _programService.GetAllProgramsAsync();
+            return Ok(programs);
+        }
 
-    public async Task<IActionResult> DeleteEducationalProgram
-    {
-        
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProgramById(Guid id)
+        {
+            try
+            {
+                var program = await _programService.GetProgramByIdAsync(id);
+                return Ok(program);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddProgram([FromBody] EducationalProgram program)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            await _programService.AddProgramAsync(program);
+            return Ok("Program added successfully!");
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateProgram(Guid id, [FromBody] EducationalProgram updatedProgram)
+        {
+            try
+            {
+                await _programService.UpdateProgramAsync(id, updatedProgram);
+                return Ok("Program updated successfully!");
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProgram(Guid id)
+        {
+            try
+            {
+                await _programService.DeleteProgramAsync(id);
+                return Ok("Program deleted successfully!");
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
     }
-    
 }

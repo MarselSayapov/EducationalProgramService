@@ -1,36 +1,50 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infastracted.Data;
+
 /// <summary>
 /// Репозиторий образовательных программ
 /// </summary>
-public class EducationalProgramRepository(ProgramDbContext context) : IRepository<EducationalProgram>
+public class EducationalProgramRepository : IRepository<EducationalProgram>
 {
-    public IEnumerable<EducationalProgram> GetAll()
+    private readonly ProgramDbContext _context;
+
+    public EducationalProgramRepository(ProgramDbContext context)
     {
-        return context.edPrograms;
+        _context = context;
     }
 
-    public EducationalProgram Get(Guid id)
+    public async Task<IEnumerable<EducationalProgram>> GetAllAsync()
     {
-        return context.edPrograms.Find(id);
+        return await _context.edPrograms.ToListAsync();
     }
 
-    public void Create(EducationalProgram item)
+    public async Task<EducationalProgram> GetAsync(Guid id)
     {
-        context.edPrograms.Add(item);
+        return await _context.edPrograms.FindAsync(id);
+    }
+
+    public async Task CreateAsync(EducationalProgram item)
+    {
+        await _context.edPrograms.AddAsync(item);
+        await _context.SaveChangesAsync();
     }
 
     public void Update(EducationalProgram item)
     {
-        context.edPrograms.Update(item);
+        _context.edPrograms.Update(item);
+        _context.SaveChanges();
     }
 
-    public void Delete(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        EducationalProgram program = context.edPrograms.Find(id);
+        var program = await _context.edPrograms.FindAsync(id);
         if (program != null)
-            context.edPrograms.Remove(program);
+        {
+            _context.edPrograms.Remove(program);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -1,53 +1,73 @@
-﻿namespace Infastracted.Data;
+﻿using System;
+using System.Threading.Tasks;
 
-public class UnitOfWork
+namespace Infastracted.Data
 {
-    private ProgramDbContext _db;
-    private EducationalModuleRepository _moduleRepository;
-    private EducationalProgramRepository _programRepository;
-
-    public EducationalModuleRepository Modules
+    public class UnitOfWork : IDisposable
     {
-        get
+        private readonly ProgramDbContext _db;
+        private EducationalModuleRepository _moduleRepository;
+        private EducationalProgramRepository _programRepository;
+
+        public UnitOfWork(ProgramDbContext db)
         {
-            if (_moduleRepository == null)
-                _moduleRepository = new EducationalModuleRepository(_db);
-            return _moduleRepository;
+            _db = db;
         }
-    }
 
-    public EducationalProgramRepository Programs
-    {
-        get
+        public EducationalModuleRepository Modules
         {
-            if (_programRepository == null)
-                _programRepository = new EducationalProgramRepository(_db);
-            return _programRepository;
-        }
-    }
-
-    public void Save()
-    {
-        _db.SaveChanges();
-    }
-    
-    private bool disposed = false;
- 
-    public virtual void Dispose(bool disposing)
-    {
-        if (!this.disposed)
-        {
-            if (disposing)
+            get
             {
-                _db.Dispose();
+                if (_moduleRepository == null)
+                {
+                    _moduleRepository = new EducationalModuleRepository(_db);
+                }
+                return _moduleRepository;
             }
-            this.disposed = true;
         }
-    }
- 
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
+
+        public EducationalProgramRepository Programs
+        {
+            get
+            {
+                if (_programRepository == null)
+                {
+                    _programRepository = new EducationalProgramRepository(_db);
+                }
+                return _programRepository;
+            }
+        }
+
+        // Синхронное сохранение
+        public void Save()
+        {
+            _db.SaveChanges();
+        }
+
+        // Асинхронное сохранение
+        public async Task SaveAsync()
+        {
+            await _db.SaveChangesAsync();
+        }
+
+        private bool _disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _db.Dispose();
+                }
+                _disposed = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
     }
 }
