@@ -7,7 +7,7 @@ namespace Infastracted;
 /// <summary>
 /// Контекст
 /// </summary>
-public class ApplicationDbContext
+public class ProgramDbContext : DbContext
 {
     /// <summary>
     /// Коллекция образовательных программ
@@ -19,7 +19,7 @@ public class ApplicationDbContext
     /// </summary>
     public DbSet<EducationalModule> edModules { get; set; }
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    public ProgramDbContext(DbContextOptions<ProgramDbContext> options)
         : base(options)
     {
         Database.EnsureCreated();
