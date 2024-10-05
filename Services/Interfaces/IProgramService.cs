@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Services.Models;
+using Services.Models.Response;
 
 namespace Application.Interfaces
 {
@@ -11,9 +13,9 @@ namespace Application.Interfaces
         
         Task<EducationalProgram> GetProgramByIdAsync(Guid id);
         
-        Task AddProgramAsync(EducationalProgram program);
+        Task<EdProgramResp> AddProgramAsync(EdProgramReq program);
         
-        Task UpdateProgramAsync(Guid id, EducationalProgram program);
+        Task<EdProgramResp> UpdateProgramAsync(EdProgramUpdateReq program);
         
         Task DeleteProgramAsync(Guid id);
     }

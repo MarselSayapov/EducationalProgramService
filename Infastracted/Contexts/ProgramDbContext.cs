@@ -1,29 +1,32 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Infastracted;
-
-/// <summary>
-/// Контекст
-/// </summary>
-public class ProgramDbContext : DbContext
+namespace Infastracted.Data
 {
-    /// <summary>
-    /// Коллекция образовательных программ
-    /// </summary>
-    public DbSet<EducationalProgram> edPrograms { get; set; }
-    
-    /// <summary>
-    /// Коллекция образовательных модулей
-    /// </summary>
-    public DbSet<EducationalModule> edModules { get; set; }
-
-    public ProgramDbContext(DbContextOptions<ProgramDbContext> options)
-        : base(options)
+    public class ProgramDbContext : DbContext
     {
-        Database.EnsureCreated();
+        public ProgramDbContext(DbContextOptions<ProgramDbContext> options) : base(options)
+        {
+            Database.EnsureCreated();
+        }
+
+        public DbSet<EducationalProgram> EducationalPrograms { get; set; }
+
+        public DbSet<EducationalModule> EducationalModules { get; set; }
+
+        public DbSet<Institute> Institutes { get; set; }
+        
+        public DbSet<HeadUser> HeadUsers { get; set; }
+
+        // protected override void OnModelCreating(ModelBuilder modelBuilder)
+        // {
+        //     modelBuilder.Entity<EducationalProgram>()
+        //         .HasMany(ep => ep.EducationalModules)
+        //         .WithOne(em => em.EducationalProgram)
+        //         .HasForeignKey(em => em.EducationalProgramId);
+        // }
+        
+        
+
     }
-
-
 }

@@ -191,6 +191,9 @@
             "projectReferences": {
               "C:\\Users\\liber\\Desktop\\projects\\UrfuTestTask\\Domain\\Domain.csproj": {
                 "projectPath": "C:\\Users\\liber\\Desktop\\projects\\UrfuTestTask\\Domain\\Domain.csproj"
+              },
+              "C:\\Users\\liber\\Desktop\\projects\\UrfuTestTask\\Services\\Services.csproj": {
+                "projectPath": "C:\\Users\\liber\\Desktop\\projects\\UrfuTestTask\\Services\\Services.csproj"
               }
             }
           }

@@ -1,63 +1,52 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
 using Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Services.Models;
+using Services.Models.Response;
 
-namespace Application.Services
+namespace Application.Services;
+
+public class ModuleService : IModuleService
 {
-    public class ModuleService : IModuleService
+    private readonly IUnitOfWork _unitOfWork;
+
+    public ModuleService(IUnitOfWork unitOfWork)
     {
-        private readonly IRepository<EducationalModule> _moduleRepository;
+        _unitOfWork = unitOfWork;
+    }
 
-        public ModuleService(IRepository<EducationalModule> moduleRepository)
-        {
-            _moduleRepository = moduleRepository;
-        }
+    public async Task<IEnumerable<EducationalModule>> GetAllModulesAsync()
+    {
+        return await _unitOfWork.Modules.GetAllAsync();
+    }
 
-        public async Task<IEnumerable<EducationalModule>> GetAllModulesAsync()
-        {
-            return await _moduleRepository.GetAllAsync();
-        }
+    public async Task<EducationalModule> GetModuleByIdAsync(Guid id)
+    {
+        return await _unitOfWork.Modules.GetAsync(id);
+    }
 
-        public async Task<EducationalModule> GetModuleByIdAsync(Guid id)
-        {
-            var module = await _moduleRepository.GetAsync(id);
-            if (module == null)
-            {
-                throw new Exception("Module not found");
-            }
-            return module;
-        }
+    public async Task<EdModuleResp> AddModuleAsync(EdModuleReq moduleReq)
+    {
+        var module = new EducationalModule() {Title = moduleReq.Title, Type = moduleReq.Type};
+        await _unitOfWork.Modules.CreateAsync(module);
+        await _unitOfWork.SaveAsync();
+        var response = new EdModuleResp() { Uuid = module.Uuid };
+        return response;
+    }
 
-        public async Task AddModuleAsync(EducationalModule module)
-        {
-            await _moduleRepository.CreateAsync(module);
-        }
+    public async Task<EdModuleResp> UpdateModuleAsync(EdModuleUpdateReq moduleReq)
+    {
+        var module = await _unitOfWork.Modules.GetAsync(moduleReq.Uuid);
+        module.Title = moduleReq.Title;
+        module.Type = moduleReq.Type;
+        _unitOfWork.Modules.Update(module);
+        await _unitOfWork.SaveAsync();
+        return new EdModuleResp() { Uuid = module.Uuid };
+    }
 
-        public async Task UpdateModuleAsync(Guid id, EducationalModule updatedModule)
-        {
-            var module = await _moduleRepository.GetAsync(id);
-            if (module == null)
-            {
-                throw new Exception("Module not found");
-            }
-            
-            module.Title = updatedModule.Title;
-            module.Type = updatedModule.Type;
-
-            _moduleRepository.Update(module);
-        }
-
-        public async Task DeleteModuleAsync(Guid id)
-        {
-            var module = await _moduleRepository.GetAsync(id);
-            if (module == null)
-            {
-                throw new Exception("Module not found");
-            }
-            await _moduleRepository.DeleteAsync(id);
-        }
+    public async Task DeleteModuleAsync(Guid id)
+    {
+        await _unitOfWork.Modules.DeleteAsync(id);
+        await _unitOfWork.SaveAsync();
     }
 }

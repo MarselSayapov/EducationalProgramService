@@ -1,73 +1,66 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Domain.Entities;
+using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
-namespace Infastracted.Data
+namespace Infastracted.Data;
+
+public class UnitOfWork : IUnitOfWork
 {
-    public class UnitOfWork : IDisposable
+    private readonly ProgramDbContext _context;
+    private EducationalModuleRepository _moduleRepository;
+    private EducationalProgramRepository _programRepository;
+    private InstituteRepository _instituteRepository;
+    private HeadUserRepository _headUserRepository;
+
+    public UnitOfWork(ProgramDbContext context)
     {
-        private readonly ProgramDbContext _db;
-        private EducationalModuleRepository _moduleRepository;
-        private EducationalProgramRepository _programRepository;
+        _context = context;
+    }
 
-        public UnitOfWork(ProgramDbContext db)
+    public IRepository<EducationalModule> Modules
+    {
+        get
         {
-            _db = db;
+            return _moduleRepository ??= new EducationalModuleRepository(_context);
         }
+    }
 
-        public EducationalModuleRepository Modules
+    public IRepository<EducationalProgram> Programs
+    {
+        get
         {
-            get
-            {
-                if (_moduleRepository == null)
-                {
-                    _moduleRepository = new EducationalModuleRepository(_db);
-                }
-                return _moduleRepository;
-            }
+            return (IRepository<EducationalProgram>)(_programRepository ??= new EducationalProgramRepository(_context));
         }
+    }
 
-        public EducationalProgramRepository Programs
+    public IRepository<Institute> Institutes
+    {
+        get
         {
-            get
-            {
-                if (_programRepository == null)
-                {
-                    _programRepository = new EducationalProgramRepository(_db);
-                }
-                return _programRepository;
-            }
+            return _instituteRepository ??= new InstituteRepository(_context);
         }
+    }
 
-        // Синхронное сохранение
-        public void Save()
+    public IRepository<HeadUser> HeadUsers
+    {
+        get
         {
-            _db.SaveChanges();
+            return _headUserRepository ??= new HeadUserRepository(_context);
         }
+    }
 
-        // Асинхронное сохранение
-        public async Task SaveAsync()
-        {
-            await _db.SaveChangesAsync();
-        }
+    public async Task SaveAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
 
-        private bool _disposed = false;
+    public void Save()
+    {
+        _context.SaveChanges();
+    }
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!_disposed)
-            {
-                if (disposing)
-                {
-                    _db.Dispose();
-                }
-                _disposed = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+    public void Dispose()
+    {
+        _context.Dispose();
     }
 }

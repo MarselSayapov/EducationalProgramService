@@ -1,11 +1,13 @@
-﻿namespace Domain.Interfaces;
+﻿using Domain.Entities;
+
+namespace Domain.Interfaces;
 /// <summary>
 /// Интерфейс для реализации репозиториев
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public interface IRepository<T> where T: class
 {
-    Task<IEnumerable<T>> GetAllAsync();
+    Task<IQueryable<T>> GetAllAsync();
     
     Task<T> GetAsync(Guid id);
     

@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Services;
+using Domain.Entities;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Services;
@@ -10,7 +11,8 @@ public static class ServiceStartUp
     {
         services.TryAddScoped<IModuleService, ModuleService>();
         services.TryAddScoped<IProgramService, ProgramService>();
-        
+        services.TryAddScoped<IInstituteService, InstituteService>();
+        services.TryAddScoped<IHeadUserService, HeadService>();
         return services;
     }
 }

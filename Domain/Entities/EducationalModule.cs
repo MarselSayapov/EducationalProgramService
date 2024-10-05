@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Domain.Entities;
 
 /// <summary>
 /// Модуль образовательной организации
@@ -8,6 +10,7 @@ public class EducationalModule
     /// <summary>
     /// Идентификатор
     /// </summary>
+    [Key]
     public Guid Uuid { get; set; }
     
     /// <summary>
@@ -20,5 +23,7 @@ public class EducationalModule
     /// </summary>
     public string Type { get; set; }
     
-    
+    public Guid? EducationalProgramId { get; set; }
+
+    public EducationalProgram? EducationalProgram { get; set; }
 }

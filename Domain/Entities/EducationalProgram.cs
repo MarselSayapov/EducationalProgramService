@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Domain.Enums;
 
 namespace Domain.Entities;
@@ -9,6 +10,7 @@ public class EducationalProgram
     /// Идентификатор
     /// </summary>
     /// <returns></returns>
+    [Key]
     public Guid Uuid { get; set; }
     
     /// <summary>
@@ -51,5 +53,7 @@ public class EducationalProgram
     /// Дата следующей аккредитации
     /// </summary>
     public DateTime AccreditationTime { get; set; }
+    
+    public ICollection<EducationalModule> EducationalModules { get; set; }
     
 }

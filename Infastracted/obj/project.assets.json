@@ -1261,6 +1261,27 @@
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
         ]
+      },
+      "Services/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Domain": "1.0.0",
+          "EntityFramework": "6.5.1",
+          "Microsoft.AspNetCore.OpenApi": "8.0.7",
+          "Microsoft.EntityFrameworkCore": "8.0.8",
+          "Microsoft.EntityFrameworkCore.SqlServer": "8.0.8",
+          "Swashbuckle.AspNetCore": "6.4.0"
+        },
+        "compile": {
+          "bin/placeholder/Services.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Services.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       }
     }
   },
@@ -3733,6 +3754,11 @@
       "type": "project",
       "path": "../Domain/Domain.csproj",
       "msbuildProject": "../Domain/Domain.csproj"
+    },
+    "Services/1.0.0": {
+      "type": "project",
+      "path": "../Services/Services.csproj",
+      "msbuildProject": "../Services/Services.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -3742,6 +3768,7 @@
       "Microsoft.AspNetCore.OpenApi >= 8.0.7",
       "Microsoft.EntityFrameworkCore >= 8.0.8",
       "Microsoft.EntityFrameworkCore.SqlServer >= 8.0.8",
+      "Services >= 1.0.0",
       "Swashbuckle.AspNetCore >= 6.4.0"
     ]
   },
@@ -3772,6 +3799,9 @@
           "projectReferences": {
             "C:\\Users\\liber\\Desktop\\projects\\UrfuTestTask\\Domain\\Domain.csproj": {
               "projectPath": "C:\\Users\\liber\\Desktop\\projects\\UrfuTestTask\\Domain\\Domain.csproj"
+            },
+            "C:\\Users\\liber\\Desktop\\projects\\UrfuTestTask\\Services\\Services.csproj": {
+              "projectPath": "C:\\Users\\liber\\Desktop\\projects\\UrfuTestTask\\Services\\Services.csproj"
             }
           }
         }

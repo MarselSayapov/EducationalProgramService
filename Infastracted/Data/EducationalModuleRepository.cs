@@ -16,35 +16,32 @@ public class EducationalModuleRepository : IRepository<EducationalModule>
         _context = context;
     }
 
-    public async Task<IEnumerable<EducationalModule>> GetAllAsync()
+    public async Task<IQueryable<EducationalModule>> GetAllAsync()
     {
-        return await _context.edModules.ToListAsync();
+        return _context.EducationalModules;
     }
 
     public async Task<EducationalModule> GetAsync(Guid id)
     {
-        return await _context.edModules.FindAsync(id);
+        return await _context.EducationalModules.FindAsync(id);
     }
 
     public async Task CreateAsync(EducationalModule item)
     {
-        await _context.edModules.AddAsync(item);
-        await _context.SaveChangesAsync();
+        await _context.EducationalModules.AddAsync(item);
     }
 
     public void Update(EducationalModule item)
     {
-        _context.edModules.Update(item);
-        _context.SaveChanges();
+        _context.EducationalModules.Update(item);
     }
 
     public async Task DeleteAsync(Guid id)
     {
-        var module = await _context.edModules.FindAsync(id);
+        var module = await _context.EducationalModules.FindAsync(id);
         if (module != null)
         {
-            _context.edModules.Remove(module);
-            await _context.SaveChangesAsync();
+            _context.EducationalModules.Remove(module);
         }
     }
 }

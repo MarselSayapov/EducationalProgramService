@@ -1,81 +1,62 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
+using Services.Models;
 
-namespace UrfuTestTask.Controllers
+namespace UrfuTestTask.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class EducationalProgramController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class EducationalProgramController : ControllerBase
+    private readonly IProgramService _programService;
+
+    public EducationalProgramController(IProgramService programService)
     {
-        private readonly IProgramService _programService;
+        _programService = programService;
+    }
 
-        public EducationalProgramController(IProgramService programService)
+    [HttpGet]
+    public async Task<IActionResult> GetAllPrograms()
+    {
+        var programs = await _programService.GetAllProgramsAsync();
+        return Ok(programs);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetProgramById(Guid id)
+    {
+        var program = await _programService.GetProgramByIdAsync(id);
+        if (program == null)
         {
-            _programService = programService;
+            return NotFound();
         }
+        return Ok(program);
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllPrograms()
+    [HttpPost]
+    public async Task<IActionResult> AddProgram([FromBody] EdProgramReq program)
+    {
+        var response = await _programService.AddProgramAsync(program);
+        return Ok("Program added successfully");
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateProgram(Guid id, [FromBody] EdProgramUpdateReq programReq)
+    {
+        var existingProgram = await _programService.GetProgramByIdAsync(id);
+        if (existingProgram == null)
         {
-            var programs = await _programService.GetAllProgramsAsync();
-            return Ok(programs);
+            return NotFound();
         }
+        await _programService.UpdateProgramAsync(programReq);
+        return Ok("Program updated successfully");
+    }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetProgramById(Guid id)
-        {
-            try
-            {
-                var program = await _programService.GetProgramByIdAsync(id);
-                return Ok(program);
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddProgram([FromBody] EducationalProgram program)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            await _programService.AddProgramAsync(program);
-            return Ok("Program added successfully!");
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProgram(Guid id, [FromBody] EducationalProgram updatedProgram)
-        {
-            try
-            {
-                await _programService.UpdateProgramAsync(id, updatedProgram);
-                return Ok("Program updated successfully!");
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProgram(Guid id)
-        {
-            try
-            {
-                await _programService.DeleteProgramAsync(id);
-                return Ok("Program deleted successfully!");
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteProgram(Guid id)
+    {
+        await _programService.DeleteProgramAsync(id);
+        return Ok("Program deleted successfully");
     }
 }

@@ -1,68 +1,112 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
 using Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Services.Models;
+using Services.Models.Response;
+namespace Application.Services;
 
-namespace Application.Services
+public class ProgramService : IProgramService
 {
-    public class ProgramService : IProgramService
+    private readonly IUnitOfWork _unitOfWork;
+
+    public ProgramService(IUnitOfWork unitOfWork)
     {
-        private readonly IRepository<EducationalProgram> _programRepository;
+        _unitOfWork = unitOfWork;
+    }
 
-        public ProgramService(IRepository<EducationalProgram> programRepository)
+    public async Task<IEnumerable<EducationalProgram>> GetAllProgramsAsync()
+    {
+        return await _unitOfWork.Programs.GetAllAsync();
+    }
+
+    public async Task<EducationalProgram> GetProgramByIdAsync(Guid id)
+    {
+        return await _unitOfWork.Programs.GetAsync(id);
+    }
+
+    public async Task<EdProgramResp> AddProgramAsync(EdProgramReq programReq)
+    {
+        var program = new EducationalProgram()
         {
-            _programRepository = programRepository;
+            Title = programReq.Title,
+            Cypher = programReq.Cypher,
+            Status = programReq.Status,
+            AccreditationTime = programReq.AccreditationTime,
+            Head = await _unitOfWork.HeadUsers.GetAsync(programReq.HeadId),
+            Institute = await _unitOfWork.Institutes.GetAsync(programReq.InstituteId),
+            Level = programReq.Level,
+            Standart = programReq.Standart
+        };
+        await _unitOfWork.Programs.CreateAsync(program);
+        await _unitOfWork.SaveAsync();
+        return new EdProgramResp()
+        {
+            AccreditationTime = program.AccreditationTime, Cypher = program.Cypher, Institute = program.Institute,
+            Status = program.Status, Title = program.Title, Standart = program.Standart, Level = program.Level,
+            Uuid = program.Uuid, HeadUser = program.Head
+        };
+    }
+
+    public async Task<EdProgramResp> UpdateProgramAsync(EdProgramUpdateReq programReq)
+    {
+        var program = await (await _unitOfWork.Programs.GetAllAsync())
+            .Include(p => p.Institute)  // Загружаем связанные объекты
+            .Include(p => p.Head)
+            .FirstOrDefaultAsync(p => p.Uuid == programReq.Uuid);
+        if (!string.IsNullOrEmpty(programReq.Title))
+        {
+            program.Title = programReq.Title;
         }
 
-        public async Task<IEnumerable<EducationalProgram>> GetAllProgramsAsync()
+        if (!string.IsNullOrEmpty(programReq.Status))
         {
-            return await _programRepository.GetAllAsync();
+            program.Status = programReq.Status;
         }
 
-        public async Task<EducationalProgram> GetProgramByIdAsync(Guid id)
+        if (!string.IsNullOrEmpty(programReq.Cypher))
         {
-            var program = await _programRepository.GetAsync(id);
-            if (program == null)
-            {
-                throw new Exception("Program not found");
-            }
-            return program;
+            program.Cypher = programReq.Cypher;
         }
 
-        public async Task AddProgramAsync(EducationalProgram program)
+        if (programReq.Level != default)
         {
-            await _programRepository.CreateAsync(program);
+            program.Level = programReq.Level;
         }
 
-        public async Task UpdateProgramAsync(Guid id, EducationalProgram updatedProgram)
+        if (programReq.Standart != default)
         {
-            var program = await _programRepository.GetAsync(id);
-            if (program == null)
-            {
-                throw new Exception("Program not found");
-            }
-            program.Title = updatedProgram.Title;
-            program.Status = updatedProgram.Status;
-            program.Cypher = updatedProgram.Cypher;
-            program.Level = updatedProgram.Level;
-            program.Standart = updatedProgram.Standart;
-            program.Institute = updatedProgram.Institute;
-            program.Head = updatedProgram.Head;
-            program.AccreditationTime = updatedProgram.AccreditationTime;
-
-            _programRepository.Update(program);
+            program.Standart = programReq.Standart;
         }
 
-        public async Task DeleteProgramAsync(Guid id)
+        if (programReq.InstituteId != null)
         {
-            var program = await _programRepository.GetAsync(id);
-            if (program == null)
-            {
-                throw new Exception("Program not found");
-            }
-            await _programRepository.DeleteAsync(id);
+            program.Institute = await _unitOfWork.Institutes.GetAsync(programReq.InstituteId);
         }
+
+        if (programReq.HeadId != null)
+        {
+            program.Head = await _unitOfWork.HeadUsers.GetAsync(programReq.HeadId);
+        }
+
+        if (programReq.AccreditationTime != default)
+        {
+            program.AccreditationTime = programReq.AccreditationTime;
+        }
+
+        _unitOfWork.Programs.Update(program);
+        await _unitOfWork.SaveAsync();
+        return new EdProgramResp()
+        {
+            AccreditationTime = program.AccreditationTime, Cypher = program.Cypher, Institute = program.Institute,
+            Status = program.Status, Title = program.Title, Standart = program.Standart, Level = program.Level,
+            Uuid = program.Uuid, HeadUser = program.Head
+        };
+    }
+
+    public async Task DeleteProgramAsync(Guid id)
+    {
+        await _unitOfWork.Programs.DeleteAsync(id);
+        await _unitOfWork.SaveAsync();
     }
 }
