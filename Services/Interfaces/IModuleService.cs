@@ -9,7 +9,7 @@ namespace Application.Interfaces
 {
     public interface IModuleService
     {
-        Task<IEnumerable<EducationalModule>> GetAllModulesAsync();
+        Task<IQueryable<EducationalModule>> GetAllModulesAsync();
         
         Task<EducationalModule> GetModuleByIdAsync(Guid id);
         

@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Models;
 using Services.Models.Response;
@@ -7,6 +8,7 @@ namespace UrfuTestTask.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class HeadUserController : ControllerBase
 {
     private readonly IHeadUserService _headUserService;

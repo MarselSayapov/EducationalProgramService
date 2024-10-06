@@ -14,6 +14,7 @@ public static class InfrastractedStartUp
         services.TryAddScoped<IRepository<EducationalModule>, EducationalModuleRepository>();
         services.TryAddScoped<IRepository<Institute>, InstituteRepository>();
         services.TryAddScoped<IRepository<HeadUser>, HeadUserRepository>();
+        services.TryAddScoped<IRepository<User>, UserRepository>();
         services.TryAddScoped<IUnitOfWork, UnitOfWork>();
         return services;
     }

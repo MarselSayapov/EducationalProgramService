@@ -15,7 +15,7 @@ public class InstituteService : IInstituteService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<IEnumerable<Institute>> GetAllInstitutesAsync()
+    public async Task<IQueryable<Institute>> GetAllInstitutesAsync()
     {
         return await _unitOfWork.Institutes.GetAllAsync();
     }

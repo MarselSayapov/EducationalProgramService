@@ -49,6 +49,10 @@
               "target": "Package",
               "version": "[6.5.1, )"
             },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[8.0.7, )"
@@ -126,6 +130,10 @@
             "EntityFramework": {
               "target": "Package",
               "version": "[6.5.1, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.8, )"
             },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
@@ -212,6 +220,10 @@
               "target": "Package",
               "version": "[6.5.1, )"
             },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[8.0.7, )"
@@ -293,6 +305,10 @@
             "EntityFramework": {
               "target": "Package",
               "version": "[6.5.1, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.8, )"
             },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",

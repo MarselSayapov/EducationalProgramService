@@ -6,7 +6,7 @@ namespace Application.Interfaces;
 
 public interface IHeadUserService
 {
-    Task<IEnumerable<HeadUser>> GetAllHeadUsersAsync();
+    Task<IQueryable<HeadUser>> GetAllHeadUsersAsync();
         
     Task<HeadUser> GetHeadUserByIdAsync(Guid id);
         

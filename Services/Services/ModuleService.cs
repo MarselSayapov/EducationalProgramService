@@ -15,7 +15,7 @@ public class ModuleService : IModuleService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<IEnumerable<EducationalModule>> GetAllModulesAsync()
+    public async Task<IQueryable<EducationalModule>> GetAllModulesAsync()
     {
         return await _unitOfWork.Modules.GetAllAsync();
     }

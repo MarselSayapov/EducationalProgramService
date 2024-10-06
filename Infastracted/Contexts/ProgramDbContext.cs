@@ -17,16 +17,8 @@ namespace Infastracted.Data
         public DbSet<Institute> Institutes { get; set; }
         
         public DbSet<HeadUser> HeadUsers { get; set; }
-
-        // protected override void OnModelCreating(ModelBuilder modelBuilder)
-        // {
-        //     modelBuilder.Entity<EducationalProgram>()
-        //         .HasMany(ep => ep.EducationalModules)
-        //         .WithOne(em => em.EducationalProgram)
-        //         .HasForeignKey(em => em.EducationalProgramId);
-        // }
         
+        public DbSet<User> Users { get; set; }
         
-
     }
 }

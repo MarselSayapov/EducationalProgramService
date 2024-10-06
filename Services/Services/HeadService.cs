@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Services.Models;
 using Services.Models.Response;
 
@@ -15,7 +16,7 @@ public class HeadService : IHeadUserService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<IEnumerable<HeadUser>> GetAllHeadUsersAsync()
+    public async Task<IQueryable<HeadUser>> GetAllHeadUsersAsync()
     {
         return await _unitOfWork.HeadUsers.GetAllAsync();
     }

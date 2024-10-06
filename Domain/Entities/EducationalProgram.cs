@@ -54,6 +54,6 @@ public class EducationalProgram
     /// </summary>
     public DateTime AccreditationTime { get; set; }
     
-    public ICollection<EducationalModule> EducationalModules { get; set; }
+    public List<EducationalModule> EducationalModules { get; set; }
     
 }

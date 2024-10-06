@@ -9,7 +9,7 @@ namespace Application.Interfaces
 {
     public interface IProgramService
     {
-        Task<IEnumerable<EducationalProgram>> GetAllProgramsAsync();
+        Task<IQueryable<EducationalProgram>> GetAllProgramsAsync();
         
         Task<EducationalProgram> GetProgramByIdAsync(Guid id);
         
@@ -18,5 +18,8 @@ namespace Application.Interfaces
         Task<EdProgramResp> UpdateProgramAsync(EdProgramUpdateReq program);
         
         Task DeleteProgramAsync(Guid id);
+
+        Task<EdProgramResp> AddModuleToProgramAsync(Guid moduleId, Guid programId);
+        Task<EdProgramResp> DeleteModuleFromProgramAsync(Guid moduleId, Guid programId);
     }
 }

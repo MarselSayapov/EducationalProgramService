@@ -13,6 +13,7 @@ public static class ServiceStartUp
         services.TryAddScoped<IProgramService, ProgramService>();
         services.TryAddScoped<IInstituteService, InstituteService>();
         services.TryAddScoped<IHeadUserService, HeadService>();
+        services.TryAddScoped<IIdentityService, IdentityService>();
         return services;
     }
 }

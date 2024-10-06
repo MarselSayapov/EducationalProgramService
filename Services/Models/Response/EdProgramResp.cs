@@ -22,4 +22,6 @@ public class EdProgramResp
     public HeadUser HeadUser { get; set; }
     
     public DateTime AccreditationTime { get; set; }
+    
+    public ICollection<EducationalModule> EducationalModules { get; set; }
 }

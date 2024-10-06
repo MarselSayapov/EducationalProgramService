@@ -11,6 +11,7 @@ public class UnitOfWork : IUnitOfWork
     private EducationalProgramRepository _programRepository;
     private InstituteRepository _instituteRepository;
     private HeadUserRepository _headUserRepository;
+    private UserRepository _userRepository;
 
     public UnitOfWork(ProgramDbContext context)
     {
@@ -46,6 +47,14 @@ public class UnitOfWork : IUnitOfWork
         get
         {
             return _headUserRepository ??= new HeadUserRepository(_context);
+        }
+    }
+
+    public IRepository<User> Users
+    {
+        get
+        {
+            return _userRepository ??= new UserRepository(_context);
         }
     }
 

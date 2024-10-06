@@ -6,7 +6,7 @@ namespace Application.Interfaces;
 
 public interface IInstituteService
 {
-    Task<IEnumerable<Institute>> GetAllInstitutesAsync();
+    Task<IQueryable<Institute>> GetAllInstitutesAsync();
         
     Task<Institute> GetInstituteByIdAsync(Guid id);
         

@@ -13,6 +13,8 @@ namespace Domain.Interfaces
         IRepository<Institute> Institutes { get; }
         
         IRepository<HeadUser> HeadUsers { get; }
+        
+        IRepository<User> Users { get; }
         Task SaveAsync();
         void Save();
     }
